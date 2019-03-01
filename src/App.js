@@ -11,7 +11,7 @@ class App extends Component {
         { id: 1551274974621, check: false, content: 'Доробити todo', visual: true, },
         { id: 1551274974622, check: false, content: 'Заповнити форму як справи', visual: true, },
       ],
-      vlueInput: "",
+      valueInput: "",
       arhivTasks: [],
     }
   }
@@ -19,7 +19,7 @@ class App extends Component {
   render() {
     const arrTodo = this.state.todo.map((el, index) => {
       if (!el.visual) return null;
-      return (<Todo key={index} click={() => this.updateCheck(el.id)} data={this.state.todo[index]} />)
+      return (<Todo key={index} click={() => this.updateCheck(el.id)} data={ el } />)
     });
     const task = this.countTask(this.state.todo);
 
@@ -30,8 +30,8 @@ class App extends Component {
         <input
           className="Font" 
           placeholder="add..."
-          value={this.state.vlueInput}
-          onChange={(event) => this.vlueInput(event)}
+          value={this.state.valueInput}
+          onChange={(event) => this.valueInput(event)}
           type="text"
         />
         <button className="Font" onClick={() => this.addTodo()}>Добавити</button><br />
@@ -55,9 +55,9 @@ class App extends Component {
     this.setState({ todo: arrtodo, })
   }
 
-  vlueInput = (event) => {
+  valueInput = (event) => {
     const text = event.target.value;
-    this.setState({ vlueInput: text })
+    this.setState({ valueInput: text })
   }
 
   toAthive = () => {
@@ -81,29 +81,18 @@ class App extends Component {
     let arrTodo = [...this.state.todo];
     let arrMark = [];
 
-    for (let i = 0; i < arrTodo.length; i++) {
-      if (arrTodo[i].check === false) {
-        arrTodo[i].visual = true;
-        arrMark.push(arrTodo[i]);
-      } else {
-        arrTodo[i].visual = false;
-        arrMark.push(arrTodo[i]);
-      }
-    }
+    arrMark = arrTodo.map(el => { return {...el, visual: !el.check }})
+    arrMark = arrTodo.map(el => { return {...el, visual: !el.check }})
+       
     this.setState({ todo: arrMark })
   }
   viewMark = () => {
     let arrTodo = [...this.state.todo];
     let arrMark = [];
-    for (let i = 0; i < arrTodo.length; i++) {
-      if (arrTodo[i].check === true) {
-        arrTodo[i].visual = true;
-        arrMark.push(arrTodo[i]);
-      } else {
-        arrTodo[i].visual = false;
-        arrMark.push(arrTodo[i]);
-      }
-    }
+    
+    arrMark = arrTodo.map(el => { return {...el, visual: el.check }})
+    arrMark = arrTodo.map(el => { return {...el, visual: el.check }})
+    
     this.setState({ todo: arrMark })
   }
 
@@ -118,13 +107,13 @@ class App extends Component {
   }
   
   addTodo = () => {
-    if (!this.state.vlueInput) return;
+    if (!this.state.valueInput) return;
     const setId = new Date().getTime();
-    const form = { id: setId, check: false, content: this.state.vlueInput, visual: true, };
+    const form = { id: setId, check: false, content: this.state.valueInput, visual: true, };
     let tec = [...this.state.todo];
     tec.push(form);
 
-    this.setState({ todo: tec, vlueInput: '' });
+    this.setState({ todo: tec, valueInput: '' });
   }
 
   countTask = (arrtodo) => {
